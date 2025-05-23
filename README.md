@@ -25,7 +25,7 @@ Convert semantic version number to container image tags.
 
 ```yaml
       - name: Convert Version to Tags
-        id: version
+        id: image_tags
         uses: joepitt91/action-version-to-tags@v1
         with:
           version: ${{ steps.version.outputs.version }}
