@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2025 Joe Pitt
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+name: Convert Version to Tags
+author: Joe Pitt
+description: Convert semantic version number to container image tags.
+inputs:
+  version:
+    description: The semantic version number to convert.
+    required: true
+outputs:
+  major_tag:
+    description: The tag for major version. e.g. 3
+    value: ${{ steps.convert.outputs.major }}
+  minor_tag:
+    description: The tag for minor version. e.g. 3.2
+    value: ${{ steps.convert.outputs.minor }}
+  patch_tag:
+    description: The tag for patch version. e.g. 3.2.87
+    value: ${{ steps.convert.outputs.patch }}
+runs:
+  using: composite
+  steps:
+  - name: Install Dependencies
+    id: dependencies
+    run: pip install --quiet --upgrade -r ${{ github.action_path }}/requirements.txt
+    shell: bash
+  - name: Get Latest Version
+    id: get_version
+    env:
+      INPUT_version: ${{ inputs.version }}
+    shell: python
+    run: |
+      from os import getenv
+      from semver import Version
+
+      version = Version.parse(getenv("INPUT_version"))
+      with open(getenv("GITHUB_OUTPUT"), "a", encoding="utf-8") as f:
+          f.write(f"major={version.major}\n")
+          f.write(f"minor={version.major}.{version.minor}\n")
+          f.write(f"patch={version.major}.{version.minor}.{version.patch}\n")
+
+  - name: Print Tags
+    id: print
+    run: |
+      echo Tags:
+      echo ${{ steps.convert.outputs.major }}
+      echo ${{ steps.convert.outputs.minor }}
+      echo ${{ steps.convert.outputs.patch }}
+    shell: bash
+branding:
+  color: blue
+  icon: disc
