@@ -27,8 +27,9 @@ runs:
     id: dependencies
     run: pip install --quiet --upgrade -r ${{ github.action_path }}/requirements.txt
     shell: bash
-  - name: Get Latest Version
-    id: get_version
+
+  - name: Convert Version
+    id: convert
     env:
       INPUT_version: ${{ inputs.version }}
     shell: python
