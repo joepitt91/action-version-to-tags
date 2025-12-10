@@ -35,7 +35,6 @@ runs:
 
       sys.path.insert(1, abspath(join(getenv("GITHUB_ACTION_PATH", "."), "lib")))
 
-      from get_latest_version.dockerhub import get_latest_image_version
       from semver import Version
 
       version = Version.parse(getenv("INPUT_version"))
